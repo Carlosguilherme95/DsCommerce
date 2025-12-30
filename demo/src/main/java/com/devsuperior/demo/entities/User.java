@@ -1,0 +1,57 @@
+package com.devsuperior.demo.entities;
+import jakarta.persistence.*;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+@Entity
+@Table(name="tb_user")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+    private String email;
+    private String phone;
+    private LocalDate birthDate;
+    private String password;
+
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders = new ArrayList<>();
+    /*
+    * nessa situação é importante lembrar que a classe User pode ter várias
+    * orders (pedidos) por isso é necessário criar a lista
+    * */
+
+    public User(Long id, String password, LocalDate birthday, String phone, String email, String name) {
+        this.id = id;
+        this.password = password;
+        this.birthDate = birthday;
+        this.phone = phone;
+        this.email = email;
+        this.name = name;
+
+    }
+
+    public User() {};
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(phone, user.phone) && Objects.equals(birthDate, user.birthDate) && Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, email, phone, birthDate, password);
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+}
